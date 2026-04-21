@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>교실 자리배치도</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .page {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    }
+    .header {
+      padding: 28px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+    .subtext {
+      margin-top: 8px;
+      color: #475569;
+      font-size: 14px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    button {
+      border: none;
+      border-radius: 16px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-dark { background: #0f172a; color: white; }
+    .btn-blue { background: #0284c7; color: white; }
+    .btn-light { background: white; color: #334155; border: 1px solid #cbd5e1; }
+    .message {
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 14px;
+      border-radius: 18px;
+      border: 1px solid #e2e8f0;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+    }
+    .panel {
+      padding: 20px;
+      background: #f8fafc;
+      border-radius: 24px;
+      border: 1px solid #e2e8f0;
+    }
+    .panel h2 {
+      margin: 0 0 12px 0;
+      font-size: 20px;
+    }
+    .panel p {
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    textarea, input {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 14px;
+      font-size: 14px;
+      background: white;
+      outline: none;
+    }
+    textarea { min-height: 420px; resize: vertical; }
+    input:focus, textarea:focus {
+      border-color: #0ea5e9;
+      box-shadow: 0 0 0 4px rgba(14,165,233,.12);
+    }
+    .stats {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .stat {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .stat-label {
+      color: #64748b;
+      font-size: 13px;
+    }
+    .stat-value {
+      margin-top: 6px;
+      font-size: 28px;
+      font-weight: 700;
+    }
+    .warning {
+      margin-top: 14px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      color: #92400e;
+      border-radius: 18px;
+      padding: 14px;
+      font-size: 14px;
+    }
+    .selected-placeholder, .selected-box {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .selected-meta {
+      color: #64748b;
+      font-size: 13px;
+    }
+    .selected-value {
+      margin-top: 6px;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .panel-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+    .mini-btn {
+      padding: 9px 12px;
+      font-size: 12px;
+      border-radius: 12px;
+      background: white;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+    .seat-area {
+      padding: 24px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .window-label {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 10px 18px;
+      font-weight: 700;
+      color: #475569;
+    }
+    .chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+    .map-wrap {
+      overflow-x: auto;
+    }
+    .seat-map {
+      min-width: 980px;
+      margin: 0 auto;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 40px;
+      display: grid;
+      grid-template-columns: repeat(9, 92px);
+      grid-template-rows: repeat(7, 68px);
+      gap: 10px;
+      justify-content: center;
+    }
+    .seat {
+      border: 1px solid #78716c;
+      background: #efe2b4;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    .seat:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+    .seat.selected {
+      border-color: #0ea5e9;
+      background: #e0f2fe;
+      box-shadow: 0 0 0 3px rgba(14,165,233,.12);
+    }
+    .seat.highlight {
+      background: #fef3c7;
+      border-color: #ec4899;
+      outline: 2px solid #ec4899;
+    }
+    .teacher {
+      background: #dbeafe;
+      border: 1px solid #64748b;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    .screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-style: italic;
+      font-weight: 700;
+      color: #334155;
+    }
+    .info-box {
+      margin-top: 16px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 16px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #334155;
+    }
+    @media (max-width: 1100px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="card header">
+      <div>
+        <h1>교실 자리배치도</h1>
+        <div class="subtext">원본 배치 구조를 유지한 채 이름 수정과 랜덤 셔플이 가능합니다.</div>
+      </div>
+      <div class="actions">
+        <button class="btn-dark" id="applyBtn">이름 적용</button>
+        <button class="btn-blue" id="shuffleBtn">랜덤 셔플</button>
+        <button class="btn-light" id="resetBtn">초기화</button>
+      </div>
+    </div>
+
+    <div class="message card" id="message">원본 배치로 시작되었습니다.</div>
+
+    <div class="layout">
+      <div>
+        <div class="panel">
+          <h2>학생 이름 목록</h2>
+          <p>한 줄에 한 명씩 입력한 뒤 <strong>이름 적용</strong> 또는 <strong>랜덤 셔플</strong>을 누르세요.</p>
+          <textarea id="namesText"></textarea>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-label">입력 인원</div>
+              <div class="stat-value" id="inputCount">0명</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">좌석 수</div>
+              <div class="stat-value" id="seatCount">0석</div>
+            </div>
+          </div>
+          <div class="warning" id="overflowWarning" style="display:none;"></div>
+        </div>
+
+        <div class="panel" style="margin-top:20px;">
+          <div class="panel-row">
+            <h2 style="margin:0;">선택한 좌석</h2>
+            <button class="mini-btn" id="syncBtn">목록 다시 불러오기</button>
+          </div>
+          <div id="selectedPanel" class="selected-placeholder" style="margin-top:12px; color:#64748b; font-size:14px;">
+            좌석을 클릭하면 여기서 이름을 수정할 수 있습니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="seat-area">
+        <div class="topbar">
+          <div class="window-label">뒤쪽 유리창</div>
+          <div class="chips">
+            <div class="chip" id="filledCount">배치됨 0석</div>
+            <div class="chip" id="emptyCount">빈자리 0석</div>
+          </div>
+        </div>
+
+        <div class="map-wrap">
+          <div class="seat-map" id="seatMap">
+            <div class="teacher" style="grid-column: 3; grid-row: 7;">강사</div>
+            <div class="screen" style="grid-column: 5 / span 2; grid-row: 7;">앞쪽 스크린</div>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div><strong>이름 적용:</strong> 왼쪽 목록 순서대로 현재 고정 좌석 위치에 배치됩니다.</div>
+          <div><strong>랜덤 셔플:</strong> 입력한 이름 목록을 무작위로 섞은 뒤 같은 좌석 구조에 다시 배치합니다.</div>
+          <div><strong>개별 수정:</strong> 자리 카드를 클릭하면 특정 좌석의 이름만 바로 수정할 수 있습니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const initialSeats = [
+      { id: 1, name: "조윤", row: 1, col: 1, highlight: true },
+      { id: 2, name: "권태현", row: 2, col: 1 },
+
+      { id: 3, name: "조은결", row: 1, col: 2 },
+      { id: 4, name: "김성호", row: 2, col: 2 },
+      { id: 5, name: "한혜정", row: 3, col: 2 },
+      { id: 6, name: "유지산", row: 4, col: 2 },
+
+      { id: 7, name: "이춘우", row: 1, col: 4 },
+      { id: 8, name: "김민정", row: 2, col: 4 },
+      { id: 9, name: "진미경", row: 3, col: 4 },
+      { id: 10, name: "김민정", row: 4, col: 4 },
+
+      { id: 11, name: "최준호", row: 1, col: 5 },
+      { id: 12, name: "박지우", row: 2, col: 5 },
+      { id: 13, name: "박상우", row: 3, col: 5 },
+      { id: 14, name: "이종혁", row: 4, col: 5 },
+      { id: 15, name: "심정호", row: 5, col: 5 },
+
+      { id: 16, name: "이서우", row: 1, col: 6 },
+      { id: 17, name: "박은빈", row: 2, col: 6 },
+      { id: 18, name: "조용민", row: 3, col: 6 },
+      { id: 19, name: "김유선", row: 4, col: 6 },
+      { id: 20, name: "이태경", row: 5, col: 6 },
+
+      { id: 21, name: "황동건", row: 1, col: 8 },
+      { id: 22, name: "원가희", row: 2, col: 8 },
+      { id: 23, name: "김선희", row: 3, col: 8 },
+      { id: 24, name: "박초롱", row: 4, col: 8 },
+      { id: 25, name: "채란", row: 5, col: 8 },
+
+      { id: 26, name: "이상욱", row: 1, col: 9 },
+      { id: 27, name: "신혜진", row: 2, col: 9 },
+      { id: 28, name: "한은태", row: 3, col: 9 },
+      { id: 29, name: "박준하", row: 4, col: 9 },
+      { id: 30, name: "이민지", row: 5, col: 9 },
+    ];
+
+    const STORAGE_KEY = "classroom-seat-map-state-v1";
+    let seats = JSON.parse(JSON.stringify(initialSeats));
+    let selectedSeatId = null;
+
+    const seatMap = document.getElementById("seatMap");
+    const namesText = document.getElementById("namesText");
+    const inputCount = document.getElementById("inputCount");
+    const seatCount = document.getElementById("seatCount");
+    const filledCount = document.getElementById("filledCount");
+    const emptyCount = document.getElementById("emptyCount");
+    const overflowWarning = document.getElementById("overflowWarning");
+    const selectedPanel = document.getElementById("selectedPanel");
+    const message = document.getElementById("message");
+
+    function cloneSeats(list) {
+      return JSON.parse(JSON.stringify(list));
+    }
+
+    function saveState() {
+      const payload = {
+        seats,
+        namesText: namesText.value,
+        selectedSeatId
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return false;
+
+        const parsed = JSON.parse(raw);
+        if (!parsed || !Array.isArray(parsed.seats)) return false;
+
+        seats = parsed.seats.map((seat, index) => ({
+          ...initialSeats[index],
+          ...seat
+        }));
+        namesText.value = typeof parsed.namesText === "string"
+          ? parsed.namesText
+          : formatNamesFromSeats(seats);
+        selectedSeatId = parsed.selectedSeatId ?? null;
+        return true;
+      } catch (e) {
+        console.error("저장된 상태를 불러오지 못했습니다.", e);
+        return false;
+      }
+    }
+
+    function clearSavedState() {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function formatNamesFromSeats(list) {
+      return list.map(seat => seat.name).join("\n");
+    }
+
+    function getParsedNames() {
+      return namesText.value
+        .split("\n")
+        .map(name => name.trim())
+        .filter(Boolean);
+    }
+
+    function setMessage(text) {
+      message.textContent = text;
+    }
+
+    function updateCounts() {
+      const parsedNames = getParsedNames();
+      inputCount.textContent = parsedNames.length + "명";
+      seatCount.textContent = seats.length + "석";
+
+      const filled = seats.filter(seat => seat.name && seat.name !== "빈자리").length;
+      const empty = seats.length - filled;
+      filledCount.textContent = "배치됨 " + filled + "석";
+      emptyCount.textContent = "빈자리 " + empty + "석";
+
+      const overflow = Math.max(parsedNames.length - seats.length, 0);
+      if (overflow > 0) {
+        overflowWarning.style.display = "block";
+        overflowWarning.innerHTML = '좌석보다 학생이 <strong>' + overflow + '명</strong> 더 많습니다. 초과 인원은 배치되지 않습니다.';
+      } else {
+        overflowWarning.style.display = "none";
+        overflowWarning.textContent = "";
+      }
+    }
+
+    function renderSelectedPanel() {
+      const currentSeat = seats.find(seat => seat.id === selectedSeatId);
+
+      if (!currentSeat) {
+        selectedPanel.className = "selected-placeholder";
+        selectedPanel.innerHTML = "좌석을 클릭하면 여기서 이름을 수정할 수 있습니다.";
+        return;
+      }
+
+      selectedPanel.className = "selected-box";
+      selectedPanel.innerHTML = `
+        <div class="selected-meta">좌석 위치</div>
+        <div class="selected-value">${currentSeat.row}행 / ${currentSeat.col}열</div>
+        <div style="margin-top:14px;">
+          <label style="display:block; margin-bottom:8px; font-size:14px; font-weight:700; color:#334155;">이름 수정</label>
+          <input id="seatNameInput" value="${escapeHtml(currentSeat.name)}" />
+        </div>
+        <div style="margin-top:10px; color:#64748b; font-size:14px;">
+          자리 카드를 클릭하면 여기서 바로 이름을 바꿀 수 있습니다.
+        </div>
+      `;
+
+      const seatNameInput = document.getElementById("seatNameInput");
+      seatNameInput.addEventListener("input", (e) => {
+        const newName = e.target.value;
+        seats = seats.map(seat => seat.id === selectedSeatId ? { ...seat, name: newName } : seat);
+        renderSeatMap();
+        updateCounts();
+        saveState();
+      });
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function renderSeatMap() {
+      seatMap.querySelectorAll(".seat").forEach(el => el.remove());
+
+      seats.forEach(seat => {
+        const btn = document.createElement("button");
+        btn.className = "seat";
+        if (seat.id === selectedSeatId && !seat.highlight) btn.classList.add("selected");
+        if (seat.highlight) btn.classList.add("highlight");
+        btn.textContent = seat.name && seat.name.trim() ? seat.name : "빈자리";
+        btn.style.gridColumn = seat.col;
+        btn.style.gridRow = seat.row + 1;
+        btn.addEventListener("click", () => {
+          selectedSeatId = seat.id;
+          renderSeatMap();
+          renderSelectedPanel();
+        });
+        seatMap.appendChild(btn);
+      });
+    }
+
+    function applyNames() {
+      const parsedNames = getParsedNames();
+      seats = seats.map((seat, index) => ({
+        ...seat,
+        name: parsedNames[index] || "빈자리"
+      }));
+      setMessage("입력한 이름 목록을 현재 자리 순서대로 적용했습니다.");
+      renderSeatMap();
+      renderSelectedPanel();
+      updateCounts();
+      saveState();
+    }
+
+    function shuffleSeats() {
+      const parsedNames = getParsedNames();
+      const shuffledNames = shuffleArray(parsedNames);
+      seats = seats.map((seat, index) => ({
+        ...seat,
+        name: shuffledNames[index] || "빈자리"
+      }));
+      namesText.value = shuffledNames.join("\n");
+      selectedSeatId = null;
+      setMessage("학생 이름을 랜덤 셔플해서 현재 배치도 좌석에 다시 배치했습니다.");
+      renderSeatMap();
+      renderSelectedPanel();
+      updateCounts();
+      saveState();
+    }
+
+    function resetSeats() {
+      seats = cloneSeats(initialSeats);
+      namesText.value = formatNamesFromSeats(initialSeats);
+      selectedSeatId = null;
+      setMessage("원본 자리배치로 초기화했습니다.");
+      renderSeatMap();
+      renderSelectedPanel();
+      updateCounts();
+      clearSavedState();
+    }
+
+    function syncNamesFromSeats() {
+      namesText.value = formatNamesFromSeats(seats);
+      setMessage("현재 자리배치에 있는 이름을 왼쪽 목록에 다시 반영했습니다.");
+      updateCounts();
+      saveState();
+    }
+
+    document.getElementById("applyBtn").addEventListener("click", applyNames);
+    document.getElementById("shuffleBtn").addEventListener("click", shuffleSeats);
+    document.getElementById("resetBtn").addEventListener("click", resetSeats);
+    document.getElementById("syncBtn").addEventListener("click", syncNamesFromSeats);
+    namesText.addEventListener("input", () => {
+      updateCounts();
+      saveState();
+    });
+
+    const restored = loadState();
+    if (restored) {
+      setMessage("로컬스토리지에서 마지막 저장 상태를 불러왔습니다.");
+    } else {
+      namesText.value = formatNamesFromSeats(initialSeats);
+    }
+    renderSeatMap();
+    renderSelectedPanel();
+    updateCounts();
+    if (restored) saveState();
+  </script>
+</body>
+</html>
