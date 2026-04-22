@@ -1,12 +1,33 @@
 <html>
     <head>
         <title>포토캘린더</title>
+        <style>
+            #calendar {
+                border : 1px solid black;
+            }
+            img {
+                width: 100%;
+            }
+            #calendar th {             /*#calendar th : calendar 밑에 있는 모든 th*/
+                                        /*#calendar > th : calendar 바로 밑에 있는 th*/
+                width: 14%;
+            }
+
+            #calendar tr > *:first-child {
+                color:red;
+            }
+
+            #calendar th:last-child,#calendar td:last-child{
+                color: blue;
+            }
+
+        </style>
     </head>
     <body>
         <h1>포토캘린더</h1>
         <h2>4월</h2>
         <img src="사진1.jpg" width="80%">
-        <table border="1" width="80%">
+        <table border="1" width="80%" id="calendar">
             <tr>
                 <th width="14%" style="color: red">sun</th>
                 <th width="14%">mon</th>
