@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+    <h1>alert테스트</h1>
+    
+    <button onclick="confirmAlert()">버튼</button>
+
+    <script>
+        function showAlert() {
+            // console.log("버튼 클릭됨");
+            // alert('d이건 경고창');
+            Swal.fire({
+                title: '안녕',
+                text: '이건 경고창',
+                icon: 'success', //error, warning, ...
+                confirmButtonText: '확인'
+            })
+        }
+
+        function basicAlert() {
+            Swal.fire('안녕', '이건 경고', 'success', '확인')
+        }
+
+        function confirmAlert() {
+            Swal.fire({
+                title: '정말삭제?',
+                text: '이건 경고창',
+                icon: 'question', //error, warning, ...
+                showCancelButton: true,
+                confirmButtonText: '삭제',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                // console.log(result);
+                if (result.isConfirmed) {
+                    Swal.fire('삭제완', '항목삭제됨', 'success');   
+                } else {
+                    Swal.fire('취소됨', '데엍유지', 'info');
+                }
+            })
+        }
+
+        function inputPrompt() {
+            Swal.fire({
+                title:'이름',
+                input: 'text',
+                inputPlaceholder: '여기입력',
+                showCancelButton: true,
+                confirmButtonText: '제출',
+                cancelButtonText:'취소'
+            }).then((result) => {
+                if(result.isConfirmed && result.value) {
+                    Swal.fire(`입력한 값: ${result.value}`);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

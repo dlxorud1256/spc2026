@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <title>Document</title>
+
+    <style>
+        body {
+            height: 2000px;
+            padding: 50px;
+        }
+        .box {
+            margin: 100px 0;
+            padding: 40px;
+            background: white;
+            border: 2px solid pink;
+            text-align: center;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <h1>스크롤</h1>
+    <div class="box" data-aos="fade-up">첫번째</div>
+    <div class="box" data-aos="fade-right">첫번째</div>
+    <div class="box" data-aos="zoom-in">첫번째</div>
+
+      <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script>
+            AOS.init();
+        </script>
+</body>
+</html>

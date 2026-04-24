@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bootstrap + AOS Scroll Animation</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 3600px;
+      background-color: #020617;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .navbar-custom {
+      background: rgba(2, 6, 23, 0.75);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .text-gradient {
+      background: linear-gradient(90deg, #22d3ee, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-section {
+      min-height: 100vh;
+      padding-top: 120px;
+      background: linear-gradient(135deg, #020617, #312e81, #581c87);
+    }
+
+    .section-dark {
+      background-color: #020617;
+      padding: 130px 0;
+    }
+
+    .section-gradient-purple {
+      padding: 140px 0;
+      background: linear-gradient(90deg, #3b0764, #020617, #164e63);
+    }
+
+    .section-gradient-gallery {
+      padding: 130px 0;
+      background: linear-gradient(180deg, #020617, #312e81);
+    }
+
+    .final-section {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #164e63, #020617, #581c87);
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .gradient-shadow {
+      box-shadow:
+        20px 20px 60px rgba(0, 0, 0, 0.55),
+        inset 0 0 40px rgba(255, 255, 255, 0.08);
+    }
+
+    .hero-image-wrap {
+      position: relative;
+    }
+
+    .hero-image-wrap::before {
+      content: "";
+      position: absolute;
+      inset: -24px;
+      background: linear-gradient(90deg, #06b6d4, #9333ea);
+      filter: blur(45px);
+      border-radius: 999px;
+      opacity: 0.45;
+      z-index: 0;
+    }
+
+    .hero-card {
+      position: relative;
+      z-index: 1;
+      border-radius: 28px;
+      padding: 32px;
+    }
+
+    .hero-img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      border-radius: 20px;
+    }
+
+    .card-custom {
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: 0.3s;
+    }
+
+    .card-custom:hover {
+      transform: translateY(-8px);
+      border-color: #22d3ee;
+    }
+
+    .card-custom img {
+      height: 210px;
+      object-fit: cover;
+      transition: 0.5s;
+    }
+
+    .card-custom:hover img {
+      transform: scale(1.1);
+    }
+
+    .card-blue {
+      background: linear-gradient(135deg, #2563eb, #3730a3);
+    }
+
+    .card-purple {
+      background: linear-gradient(135deg, #9333ea, #be185d);
+    }
+
+    .card-green {
+      background: linear-gradient(135deg, #0891b2, #047857);
+    }
+
+    .big-banner {
+      border-radius: 40px;
+      padding: 80px;
+      text-align: center;
+    }
+
+    .timeline {
+      position: relative;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 4px;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, #22d3ee, #a855f7, #ec4899);
+    }
+
+    .timeline-item {
+      margin-bottom: 80px;
+    }
+
+    .gallery-img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .stat-box {
+      border-radius: 28px;
+      padding: 40px;
+      text-align: center;
+      height: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        padding-top: 100px;
+      }
+
+      .big-banner {
+        padding: 40px 24px;
+      }
+
+      .timeline::before {
+        display: none;
+      }
+
+      .text-md-end {
+        text-align: left !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top navbar-custom">
+    <div class="container py-2">
+      <a class="navbar-brand fw-bold text-gradient" href="#">
+        Bootstrap + AOS
+      </a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#mainNav"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+        <ul class="navbar-nav gap-md-3">
+          <li class="nav-item">
+            <a href="#hero" class="nav-link">Hero</a>
+          </li>
+          <li class="nav-item">
+            <a href="#cards" class="nav-link">Cards</a>
+          </li>
+          <li class="nav-item">
+            <a href="#timeline" class="nav-link">Timeline</a>
+          </li>
+          <li class="nav-item">
+            <a href="#gallery" class="nav-link">Gallery</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero" class="hero-section d-flex align-items-center">
+    <div class="container">
+      <div class="row align-items-center g-5">
+
+        <div class="col-md-6" data-aos="fade-right" data-aos-duration="1200">
+          <p class="text-info fw-bold letter-spacing mb-3">
+            SCROLL ANIMATION SHOWCASE
+          </p>
+
+          <h1 class="display-2 fw-black mb-4">
+            스크롤하면 <br />
+            화면이 살아나는 <br />
+            인터랙션
+          </h1>
+
+          <p class="lead text-light opacity-75 mb-4">
+            Bootstrap으로 레이아웃과 컴포넌트를 구성하고,
+            AOS 라이브러리로 스크롤에 따라 등장하는 애니메이션을 적용한 예제입니다.
+          </p>
+
+          <div class="d-flex gap-3 flex-wrap">
+            <a href="#cards" class="btn btn-info rounded-pill px-4 py-3 fw-bold text-dark">
+              예제 보기
+            </a>
+
+            <button class="btn btn-outline-light rounded-pill px-4 py-3">
+              More
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="col-md-6 hero-image-wrap"
+          data-aos="zoom-in"
+          data-aos-duration="1300"
+          data-aos-delay="300"
+        >
+          <div class="hero-card glass gradient-shadow">
+            <img
+              src="https://picsum.photos/600/450?random=10"
+              alt="hero image"
+              class="hero-img mb-4"
+            />
+
+            <h3 class="fw-bold mb-2">AOS + Bootstrap</h3>
+            <p class="text-light opacity-75 mb-0">
+              fade, zoom, flip, slide 등 다양한 스크롤 효과를 Bootstrap 디자인과 함께 사용할 수 있습니다.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Cards -->
+  <section id="cards" class="section-dark">
+    <div class="container">
+
+      <div class="text-center mb-5" data-aos="fade-up">
+        <p class="text-purple fw-bold mb-2" style="color:#c084fc;">
+          CARD EXAMPLES
+        </p>
+        <h2 class="display-5 fw-bold">
+          다양한 방향에서 등장하는 카드
+        </h2>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div
+            class="card-custom card-blue h-100"
+            data-aos="fade-up"
+            data-aos-delay="0"
+          >
+            <img
+              src="https://picsum.photos/500/300?random=1"
+              class="w-100"
+              alt="card image"
+            />
+
+            <div class="p-4">
+              <h3 class="fw-bold mb-3">Fade Up</h3>
+              <p class="text-light opacity-75 mb-0">
+                아래에서 위로 부드럽게 올라오면서 나타나는 카드입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div
+            class="card-custom card-purple h-100"
+            data-aos="fade-down"
+            data-aos-delay="200"
+          >
+            <img
+              src="https://picsum.photos/500/300?random=2"
+              class="w-100"
+              alt="card image"
+            />
+
+            <div class="p-4">
+              <h3 class="fw-bold mb-3">Fade Down</h3>
+              <p class="text-light opacity-75 mb-0">
+                위에서 아래로 내려오며 나타나는 카드입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div
+            class="card-custom card-green h-100"
+            data-aos="zoom-in"
+            data-aos-delay="400"
+          >
+            <img
+              src="https://picsum.photos/500/300?random=3"
+              class="w-100"
+              alt="card image"
+            />
+
+            <div class="p-4">
+              <h3 class="fw-bold mb-3">Zoom In</h3>
+              <p class="text-light opacity-75 mb-0">
+                작게 시작해서 확대되며 등장하는 카드입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mt-4">
+        <div class="col-md-6">
+          <div
+            class="bg-white text-dark rounded-5 p-5 gradient-shadow"
+            data-aos="fade-right"
+          >
+            <h3 class="fw-bold mb-3">왼쪽에서 등장</h3>
+            <p class="text-secondary mb-0">
+              <code>data-aos="fade-right"</code>를 사용하면 요소가 왼쪽에서 오른쪽 방향으로 들어오는 것처럼 보입니다.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div
+            class="rounded-5 p-5 gradient-shadow"
+            style="background: linear-gradient(135deg, #1e293b, #020617); border: 1px solid rgba(255,255,255,0.12);"
+            data-aos="fade-left"
+          >
+            <h3 class="fw-bold mb-3">오른쪽에서 등장</h3>
+            <p class="text-light opacity-75 mb-0">
+              <code>data-aos="fade-left"</code>를 사용하면 반대 방향에서 등장하는 느낌을 줄 수 있습니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Big Banner -->
+  <section class="section-gradient-purple">
+    <div class="container">
+      <div
+        class="big-banner glass gradient-shadow"
+        data-aos="flip-left"
+        data-aos-duration="1200"
+      >
+        <p class="text-info fw-bold mb-3">
+          FLIP ANIMATION
+        </p>
+
+        <h2 class="display-4 fw-bold mb-4">
+          카드가 뒤집히듯 등장하는 효과
+        </h2>
+
+        <p class="lead text-light opacity-75 mx-auto mb-5" style="max-width: 760px;">
+          AOS는 fade, flip, zoom, slide 등 여러 애니메이션을 제공합니다.
+          Bootstrap의 grid, card, button, spacing 클래스를 같이 사용하면 빠르게 화려한 페이지를 만들 수 있습니다.
+        </p>
+
+        <button class="btn btn-light rounded-pill px-5 py-3 fw-bold">
+          시작하기
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section id="timeline" class="section-dark">
+    <div class="container" style="max-width: 960px;">
+
+      <div class="text-center mb-5" data-aos="fade-up">
+        <p class="text-info fw-bold mb-2">TIMELINE</p>
+        <h2 class="display-5 fw-bold">
+          스크롤 타임라인 예제
+        </h2>
+      </div>
+
+      <div class="timeline">
+
+        <div class="row timeline-item">
+          <div class="col-md-6 text-md-end" data-aos="fade-right">
+            <h3 class="fw-bold mb-3">01. 기획</h3>
+            <p class="text-light opacity-75">
+              어떤 요소가 어느 방향에서 나타날지 먼저 정합니다.
+            </p>
+          </div>
+          <div class="col-md-6"></div>
+        </div>
+
+        <div class="row timeline-item">
+          <div class="col-md-6"></div>
+          <div class="col-md-6" data-aos="fade-left">
+            <h3 class="fw-bold mb-3">02. 디자인</h3>
+            <p class="text-light opacity-75">
+              Bootstrap의 Grid, Container, Spacing, Button 클래스로 UI를 구성합니다.
+            </p>
+          </div>
+        </div>
+
+        <div class="row timeline-item">
+          <div class="col-md-6 text-md-end" data-aos="zoom-in-right">
+            <h3 class="fw-bold mb-3">03. 애니메이션</h3>
+            <p class="text-light opacity-75">
+              AOS의 <code>data-aos</code> 속성을 넣어서 스크롤 등장 효과를 적용합니다.
+            </p>
+          </div>
+          <div class="col-md-6"></div>
+        </div>
+
+        <div class="row timeline-item mb-0">
+          <div class="col-md-6"></div>
+          <div class="col-md-6" data-aos="zoom-in-left">
+            <h3 class="fw-bold mb-3">04. 완성</h3>
+            <p class="text-light opacity-75">
+              <code>AOS.init()</code>을 호출하면 스크롤에 따라 애니메이션이 실행됩니다.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery" class="section-gradient-gallery">
+    <div class="container">
+
+      <div class="text-center mb-5" data-aos="fade-up">
+        <p class="fw-bold mb-2" style="color:#f472b6;">
+          IMAGE GALLERY
+        </p>
+        <h2 class="display-5 fw-bold">
+          이미지 갤러리 등장 효과
+        </h2>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-3">
+          <img
+            data-aos="zoom-in"
+            data-aos-delay="0"
+            src="https://picsum.photos/400/500?random=11"
+            class="gallery-img"
+            alt="gallery image"
+          />
+        </div>
+
+        <div class="col-md-3">
+          <img
+            data-aos="zoom-in"
+            data-aos-delay="150"
+            src="https://picsum.photos/400/500?random=12"
+            class="gallery-img"
+            alt="gallery image"
+          />
+        </div>
+
+        <div class="col-md-3">
+          <img
+            data-aos="zoom-in"
+            data-aos-delay="300"
+            src="https://picsum.photos/400/500?random=13"
+            class="gallery-img"
+            alt="gallery image"
+          />
+        </div>
+
+        <div class="col-md-3">
+          <img
+            data-aos="zoom-in"
+            data-aos-delay="450"
+            src="https://picsum.photos/400/500?random=14"
+            class="gallery-img"
+            alt="gallery image"
+          />
+        </div>
+      </div>
+
+      <div class="row g-4 mt-5">
+        <div class="col-md-4">
+          <div
+            data-aos="flip-up"
+            class="rounded-5 p-4 h-100 bg-info text-dark"
+          >
+            <h3 class="fw-bold mb-3">Flip Up</h3>
+            <p class="mb-0">
+              아래에서 뒤집히듯 나타나는 효과입니다.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div
+            data-aos="flip-down"
+            class="rounded-5 p-4 h-100 text-white"
+            style="background-color:#a855f7;"
+          >
+            <h3 class="fw-bold mb-3">Flip Down</h3>
+            <p class="mb-0">
+              위에서 뒤집히듯 나타나는 효과입니다.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div
+            data-aos="flip-right"
+            class="rounded-5 p-4 h-100 text-white"
+            style="background-color:#ec4899;"
+          >
+            <h3 class="fw-bold mb-3">Flip Right</h3>
+            <p class="mb-0">
+              좌우 회전 느낌의 등장 효과입니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="section-dark">
+    <div class="container">
+      <div class="row g-4 text-center">
+
+        <div class="col-md-3">
+          <div
+            data-aos="fade-up"
+            data-aos-delay="0"
+            class="stat-box glass"
+          >
+            <h3 class="display-4 fw-bold text-info mb-3">01</h3>
+            <p class="text-light opacity-75 mb-0">Fade 효과</p>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div
+            data-aos="fade-up"
+            data-aos-delay="150"
+            class="stat-box glass"
+          >
+            <h3 class="display-4 fw-bold mb-3" style="color:#c084fc;">02</h3>
+            <p class="text-light opacity-75 mb-0">Zoom 효과</p>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div
+            data-aos="fade-up"
+            data-aos-delay="300"
+            class="stat-box glass"
+          >
+            <h3 class="display-4 fw-bold mb-3" style="color:#f472b6;">03</h3>
+            <p class="text-light opacity-75 mb-0">Flip 효과</p>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div
+            data-aos="fade-up"
+            data-aos-delay="450"
+            class="stat-box glass"
+          >
+            <h3 class="display-4 fw-bold mb-3" style="color:#fde047;">04</h3>
+            <p class="text-light opacity-75 mb-0">Delay 효과</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="final-section d-flex align-items-center justify-content-center text-center px-3">
+    <div
+      class="container"
+      style="max-width: 900px;"
+      data-aos="zoom-out"
+      data-aos-duration="1300"
+    >
+      <h2 class="display-2 fw-bold mb-4">
+        이제 직접 바꿔보면 됩니다
+      </h2>
+
+      <p class="lead text-light opacity-75 mb-5">
+        각 요소에 <code>data-aos</code>, <code>data-aos-delay</code>, <code>data-aos-duration</code>만 바꿔도
+        완전히 다른 느낌의 스크롤 애니메이션 페이지를 만들 수 있습니다.
+      </p>
+
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <button class="btn btn-info rounded-pill px-5 py-3 fw-bold text-dark">
+          Bootstrap
+        </button>
+
+        <button
+          class="btn rounded-pill px-5 py-3 fw-bold text-white"
+          style="background-color:#a855f7;"
+        >
+          AOS
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <script>
+    AOS.init({
+      duration: 900,
+      easing: "ease-out-cubic",
+      once: false,
+      mirror: true,
+      offset: 120
+    });
+  </script>
+</body>
+</html>
