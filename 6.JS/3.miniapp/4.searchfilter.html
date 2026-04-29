@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        input {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        li {
+            font-size: 18px;
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>search filter</h1>
+
+    <input id="searchInput" type="text" placeholder="입력">
+
+    <div>
+        <ul id="fruitList">
+            <li>Apple</li>
+            <li>Banana</li>
+            <li>Grape</li>
+            <li>Strawberry</li>
+            <li>Orange</li>
+            <li>Watermelon</li>
+            <li>Peach</li>
+            <li>Kiwi</li>
+            <li>Mango</li>
+            <li>Pineapple</li>
+        </ul>
+    </div>
+
+    <script>
+        const searchInput = document.querySelector("#searchInput");
+        const fruitItems = document.querySelectorAll("#fruitList li");
+
+        let timer;
+
+        searchInput.addEventListener("input", function () {
+            clearTimeout(timer);
+
+            timer = setTimeout(function () {
+                const keyword = searchInput.value.toLowerCase();
+
+                fruitItems.forEach(function (li) {
+                    const fruitName = li.textContent.toLowerCase();
+
+                    if (fruitName.includes(keyword)) {
+                        li.style.display = "list-item";
+                    } else {
+                        li.style.display = "none";
+                    }
+                });
+            }, 300);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+
+        input {
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        ul {
+            padding: 0;
+            margin-top: 20px;
+            width: 400px;
+        }
+
+        li {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .todo-text {
+            flex: 1;
+        }
+
+        .todo-text.done {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-icon {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+</head>
+<body>
+    <h1>to do</h1>
+
+    <input id="todoInput" placeholder="할 일을 입력하세요">
+    <button id="addBtn">추가</button>
+
+    <ul id="todoList"></ul>
+
+    <script>
+        const todoInput = document.querySelector("#todoInput");
+        const addBtn = document.querySelector("#addBtn");
+        const todoList = document.querySelector("#todoList");
+
+        addBtn.addEventListener("click", function () {
+            const todoValue = todoInput.value.trim();
+
+            if (todoValue === "") {
+                alert("할 일을 입력하세요.");
+                return;
+            }
+
+            const li = document.createElement("li");
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+
+            const span = document.createElement("span");
+            span.textContent = todoValue;
+            span.classList.add("todo-text");
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.classList.add("delete-btn");
+
+            const deleteIcon = document.createElement("img");
+            deleteIcon.src = "trashcan.jpg";   // 휴지통 아이콘 파일명
+            deleteIcon.alt = "삭제";
+            deleteIcon.classList.add("delete-icon");
+
+            deleteBtn.appendChild(deleteIcon);
+
+            checkbox.addEventListener("change", function () {
+                if (checkbox.checked) {
+                    span.classList.add("done");
+                } else {
+                    span.classList.remove("done");
+                }
+            });
+
+            deleteBtn.addEventListener("click", function () {
+                li.remove();
+            });
+
+            li.appendChild(checkbox);
+            li.appendChild(span);
+            li.appendChild(deleteBtn);
+
+            todoList.appendChild(li);
+
+            todoInput.value = "";
+        });
+    </script>
+</body>
+</html>
