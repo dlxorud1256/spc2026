@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Jinja Example</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <h1>Flask 사용자 / 상품 조회</h1>
+
+    <div class="box">
+        <h2>사용자 목록</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>이름</th>
+                    <th>이메일</th>
+                    <th>상세 조회</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for user_id, user in users.items() %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <a href="/user/{{ user.id }}">
+                            /user/{{ user.id }}
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box">
+        <h2>상품 목록</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>상품명</th>
+                    <th>가격</th>
+                    <th>ID 검색 링크</th>
+                    <th>이름 검색 링크</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for product_id, product in products.items() %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>${{ product.price }}</td>
+                    <td>
+                        <a href="/product?id={{ product.id }}">
+                            /product?id={{ product.id }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/product?name={{ product.name }}">
+                            /product?name={{ product.name }}
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box">
+        <h2>상품 검색</h2>
+
+        <p>ID로 검색</p>
+        <form action="/product" method="get">
+            <input type="number" name="id" placeholder="예: 101">
+            <button type="submit">검색</button>
+        </form>
+
+        <p>이름으로 검색</p>
+        <form action="/product" method="get">
+            <input type="text" name="name" placeholder="예: Mouse">
+            <button type="submit">검색</button>
+        </form>
+    </div>
+
+</body>
+</html>
